@@ -4,7 +4,7 @@ export default async function handler(req, res) {
   // ===== KEY SYSTEM =====
   // Valid keys env var me comma se separate rakho (Vercel dashboard > Settings > Environment Variables)
   // Agar env set nahi hai to default "bunny" use hoga
-  const validKeys = (process.env.API_KEYS || "bunny").split(",").map(k => k.trim());
+  const validKeys = (process.env.API_KEYS || "sayan").split(",").map(k => k.trim());
 
   if (!key || !validKeys.includes(key)) {
     return res.status(401).json({
