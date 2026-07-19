@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ULTRA</title>
+<title>ULTRA BOMBER</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Poppins:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
@@ -297,7 +297,7 @@
     margin: 0 0 24px;
   }
 
-  .bunny2-card {
+  .attack-card {
     width: 100%;
     max-width: 420px;
     background: linear-gradient(135deg, #1c1c1c 0%, #121212 100%);
@@ -309,7 +309,7 @@
     overflow: hidden;
     transition: background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
   }
-  .bunny2-card::before {
+  .attack-card::before {
     content: '';
     position: absolute;
     top: -60px; right: -60px;
@@ -319,7 +319,7 @@
     pointer-events: none;
   }
 
-  .bunny2-card label { display: block; font-size: 12px; color: #9aa4c2; margin: 0 0 8px; letter-spacing: 0.4px; }
+  .attack-card label { display: block; font-size: 12px; color: #9aa4c2; margin: 0 0 8px; letter-spacing: 0.4px; }
 
   .timer-display {
     display: none;
@@ -334,7 +334,7 @@
   }
   @keyframes timerPulse { 0%,100% { opacity: 1; } 50% { opacity: 0.75; } }
 
-  .bunny2-btn {
+  .attack-btn {
     width: 100%;
     margin-top: 18px;
     padding: 14px;
@@ -349,9 +349,9 @@
     color: #f5f5f5;
     box-shadow: 0 6px 18px rgba(0,0,0,0.4);
   }
-  .bunny2-btn:hover { transform: translateY(-2px); }
-  .bunny2-btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
-  .bunny2-btn.stop-state {
+  .attack-btn:hover { transform: translateY(-2px); }
+  .attack-btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+  .attack-btn.stop-state {
     background: linear-gradient(135deg, #ef4444, #7f1d1d);
     border-color: #ef4444;
     color: #fff;
@@ -406,7 +406,7 @@
 <!-- ACTIVATION POPUP -->
 <div id="activationOverlay" class="overlay">
   <div class="activation-card">
-    <h2>ULTRA</h2>
+    <h2>ULTRA BOMBER</h2>
     <label for="nameInput">Enter your name</label>
     <input id="nameInput" class="neu-input" type="text" placeholder="Your name">
     <label for="keyActivateInput">Enter your active API key</label>
@@ -446,7 +446,7 @@
 <!-- STOP POPUP -->
 <div id="stopPopup" class="overlay">
   <div class="stop-card">
-    <p>TOTAL GET TIME: <span id="totalTimeText"></span></p>
+    <p>TOTAL ATTACK TIME: <span id="totalTimeText"></span></p>
     <p>TARGET: <span id="targetText"></span></p>
     <button id="stopOkBtn" class="stop-ok-btn">OK</button>
   </div>
@@ -468,15 +468,15 @@
     <div class="profile-info">
       <div class="profile-name" id="profileName">Name</div>
       <div class="profile-meta">Exp: <b id="profileExpiry">—</b></div>
-      <div class="profile-meta">A: <b id="profilebunny2s">0</b></div>
+      <div class="profile-meta">Attacks: <b id="profileAttacks">0</b></div>
     </div>
   </div>
 
   <div class="center-wrap">
-    <h1 class="title">ULTRA</h1>
-    <div class="warning-text">heyyy.</div>
+    <h1 class="title">ULTRA BOMBER</h1>
+    <div class="warning-text">⚠ WARNING: use at your own risk.</div>
 
-    <div class="bunny2-card">
+    <div class="attack-card">
       <div id="inputGroup">
         <label for="victimInput">Enter your victim mobile number</label>
         <input id="victimInput" class="neu-input" type="text" placeholder="+919876543210">
@@ -484,7 +484,7 @@
 
       <div id="timerDisplay" class="timer-display">00:00:00</div>
 
-      <button id="bunny2Btn" class="bunny2-btn">CONTRY</button>
+      <button id="attackBtn" class="attack-btn">🚀 ATTACK !</button>
 
       <div id="responseBox" class="result-box"></div>
     </div>
@@ -494,14 +494,14 @@
 </div>
 
 <script>
-const LS_NAME = 'bunny_name';
-const LS_KEY = 'bunny_key';
-const LS_EXPIRY = 'bunny_expiry';
-const LS_bunny2S = 'bunny_bunny2s';
-const LS_ACTIVE = 'bunny_active';
-const LS_START = 'bunny_start';
-const LS_SESSION = 'bunny_session';
-const LS_TARGET = 'bunny_target';
+const LS_NAME = 'bomber_name';
+const LS_KEY = 'bomber_key';
+const LS_EXPIRY = 'bomber_expiry';
+const LS_ATTACKS = 'bomber_attacks';
+const LS_ACTIVE = 'bomber_active';
+const LS_START = 'bomber_start';
+const LS_SESSION = 'bomber_session';
+const LS_TARGET = 'bomber_target';
 
 const $ = id => document.getElementById(id);
 let timerInterval = null;
@@ -598,17 +598,17 @@ $('closeSuccessBtn').addEventListener('click', () => {
 function showMainPage() {
   const name = localStorage.getItem(LS_NAME) || 'User';
   const expiry = localStorage.getItem(LS_EXPIRY) || '—';
-  const bunny2s = localStorage.getItem(LS_bunny2S) || '0';
+  const attacks = localStorage.getItem(LS_ATTACKS) || '0';
 
   $('dpCircle').textContent = initials(name);
   $('profileName').textContent = name;
   $('profileExpiry').textContent = expiry;
-  $('profilebunny2s').textContent = bunny2s;
+  $('profileAttacks').textContent = attacks;
 
   $('mainPage').style.display = 'block';
 
   if (localStorage.getItem(LS_ACTIVE) === 'true') {
-    resumebunny2UI();
+    resumeAttackUI();
   }
 }
 
@@ -623,26 +623,26 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-/* ---------------- bunny2 flow ---------------- */
-function resumebunny2UI() {
+/* ---------------- Attack flow ---------------- */
+function resumeAttackUI() {
   const start = parseInt(localStorage.getItem(LS_START), 10);
   $('inputGroup').style.display = 'none';
-  const btn = $('bunny2Btn');
+  const btn = $('attackBtn');
   btn.classList.add('stop-state');
   btn.innerHTML = '🛑 STOP !';
   startTimer(start);
 }
 
-$('bunny2Btn').addEventListener('click', () => {
-  const bunny2ing = localStorage.getItem(LS_ACTIVE) === 'true';
-  if (bunny2ing) handleStop();
-  else handlebunny2();
+$('attackBtn').addEventListener('click', () => {
+  const attacking = localStorage.getItem(LS_ACTIVE) === 'true';
+  if (attacking) handleStop();
+  else handleAttack();
 });
 
-async function handlebunny2() {
+async function handleAttack() {
   const key = localStorage.getItem(LS_KEY);
   const number = $('victimInput').value.trim();
-  const btn = $('bunny2Btn');
+  const btn = $('attackBtn');
   const out = $('responseBox');
 
   if (!number) {
@@ -677,12 +677,12 @@ async function handlebunny2() {
       startTimer(startTs);
     } else {
       btn.disabled = false;
-      btn.innerHTML = 'CONTRY';
+      btn.innerHTML = '🚀 ATTACK !';
     }
   } catch (err) {
     out.textContent = 'Error: ' + err.message;
     btn.disabled = false;
-    btn.innerHTML = 'CONTRY';
+    btn.innerHTML = '🚀 ATTACK !';
   }
 }
 
@@ -690,7 +690,7 @@ async function handleStop() {
   const session = localStorage.getItem(LS_SESSION);
   const target = localStorage.getItem(LS_TARGET);
   const start = parseInt(localStorage.getItem(LS_START), 10);
-  const btn = $('bunny2Btn');
+  const btn = $('attackBtn');
   const out = $('responseBox');
 
   btn.disabled = true;
@@ -707,8 +707,8 @@ async function handleStop() {
   stopTimerDisplay();
   const totalMs = Date.now() - start;
 
-  const bunny2s = parseInt(localStorage.getItem(LS_bunny2S) || '0', 10) + 1;
-  localStorage.setItem(LS_bunny2S, String(bunny2s));
+  const attacks = parseInt(localStorage.getItem(LS_ATTACKS) || '0', 10) + 1;
+  localStorage.setItem(LS_ATTACKS, String(attacks));
 
   localStorage.removeItem(LS_ACTIVE);
   localStorage.removeItem(LS_START);
