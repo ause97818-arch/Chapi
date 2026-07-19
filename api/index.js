@@ -1,8 +1,9 @@
 export default async function handler(req, res) {
-  const { key, text } = req.query;
+  const { key } = req.query;
+  let text = req.query.text;
 
   // ===== KEY SYSTEM =====
-  const validKeys = (process.env.API_KEYS || "Sayan").split(",").map(k => k.trim());
+  const validKeys = (process.env.API_KEYS || "sayan").split(",").map(k => k.trim());
 
   if (!key || !validKeys.includes(key)) {
     return res.status(401).json({
@@ -18,8 +19,14 @@ export default async function handler(req, res) {
     });
   }
 
+  // "+" in query strings often gets decoded as a space (e.g. +919876543210 -> " 919876543210")
+  // Normalize it back before validating
+  text = text.trim();
+  if (/^\d{7,15}$/.test(text)) {
+    text = "+" + text;
+  }
+
   // ===== MOBILE NUMBER ONLY VALIDATION =====
-  // Must start with + followed by 7 to 15 digits (E.164 format, any country)
   const phoneRegex = /^\+[1-9]\d{6,14}$/;
 
   if (!phoneRegex.test(text)) {
@@ -53,4 +60,3 @@ export default async function handler(req, res) {
     });
   }
 }
-
