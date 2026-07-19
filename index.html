@@ -321,19 +321,6 @@
 
   .attack-card label { display: block; font-size: 12px; color: #9aa4c2; margin: 0 0 8px; letter-spacing: 0.4px; }
 
-  .timer-display {
-    display: none;
-    text-align: center;
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 34px;
-    letter-spacing: 3px;
-    color: #ff4d4d;
-    text-shadow: 0 0 18px rgba(255,60,60,0.7);
-    margin: 6px 0 18px;
-    animation: timerPulse 1s ease-in-out infinite;
-  }
-  @keyframes timerPulse { 0%,100% { opacity: 1; } 50% { opacity: 0.75; } }
-
   .attack-btn {
     width: 100%;
     margin-top: 18px;
@@ -343,11 +330,10 @@
     font-size: 15px;
     letter-spacing: 0.5px;
     cursor: pointer;
-    transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.25s ease;
+    transition: transform 0.15s ease, background 0.25s ease, border-color 0.25s ease;
     background: linear-gradient(135deg, #2a2a2a, #161616);
     border: 1px solid rgba(255,255,255,0.12);
     color: #f5f5f5;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.4);
   }
   .attack-btn:hover { transform: translateY(-2px); }
   .attack-btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
@@ -355,11 +341,21 @@
     background: linear-gradient(135deg, #ef4444, #7f1d1d);
     border-color: #ef4444;
     color: #fff;
-    animation: pulseGlow 1.3s ease-in-out infinite;
   }
-  @keyframes pulseGlow {
-    0%,100% { box-shadow: 0 0 14px rgba(239,68,68,0.5); }
-    50% { box-shadow: 0 0 30px rgba(239,68,68,0.9); }
+
+  .timer-display {
+    display: none;
+    width: 100%;
+    margin-top: 12px;
+    padding: 14px;
+    border-radius: 14px;
+    text-align: center;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 22px;
+    letter-spacing: 3px;
+    background: linear-gradient(135deg, #2a1414, #1a0a0a);
+    border: 1px solid rgba(239,68,68,0.35);
+    color: #ff5c5c;
   }
 
   .result-box {
@@ -374,6 +370,8 @@
     line-height: 1.6;
     white-space: pre-wrap;
     word-break: break-word;
+    max-height: 260px;
+    overflow-y: auto;
   }
   .k { color: #7dd3fc; } .s { color: #86efac; } .n { color: #fca5a5; } .b { color: #fbbf24; }
 
@@ -482,9 +480,9 @@
         <input id="victimInput" class="neu-input" type="text" placeholder="+919876543210">
       </div>
 
-      <div id="timerDisplay" class="timer-display">00:00:00</div>
-
       <button id="attackBtn" class="attack-btn">🚀 ATTACK !</button>
+
+      <div id="timerDisplay" class="timer-display">00:00:00</div>
 
       <div id="responseBox" class="result-box"></div>
     </div>
@@ -545,6 +543,24 @@ function syntaxHighlight(json) {
       return '<span class="' + cls + '">' + m + '</span>';
     }
   );
+}
+
+function typeWriterEffect(el, text, speed = 6) {
+  el.textContent = '';
+  let i = 0;
+  return new Promise(resolve => {
+    function step() {
+      if (i < text.length) {
+        el.textContent += text.charAt(i);
+        i++;
+        el.scrollTop = el.scrollHeight;
+        setTimeout(step, speed);
+      } else {
+        resolve();
+      }
+    }
+    step();
+  });
 }
 
 /* ---------------- Activation flow ---------------- */
@@ -658,7 +674,9 @@ async function handleAttack() {
   try {
     const res = await fetch(`/api?key=${encodeURIComponent(key)}&text=${encodeURIComponent(number)}`);
     const data = await res.json();
-    out.innerHTML = syntaxHighlight(JSON.stringify(data, null, 2));
+    const jsonText = JSON.stringify(data, null, 2);
+    await typeWriterEffect(out, jsonText, 6);
+    out.innerHTML = syntaxHighlight(jsonText);
 
     if (data.status === true && data.session) {
       const startTs = Date.now();
@@ -699,7 +717,9 @@ async function handleStop() {
   try {
     const res = await fetch(`/api/dlt?session=${encodeURIComponent(session)}`);
     const data = await res.json();
-    out.innerHTML = syntaxHighlight(JSON.stringify(data, null, 2));
+    const jsonText = JSON.stringify(data, null, 2);
+    await typeWriterEffect(out, jsonText, 6);
+    out.innerHTML = syntaxHighlight(jsonText);
   } catch (err) {
     out.textContent = 'Error: ' + err.message;
   }
