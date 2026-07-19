@@ -203,12 +203,13 @@
   button.send:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
 
   button.send.stop-state {
-    background: linear-gradient(135deg, #22c55e, #15803d);
+    background: linear-gradient(135deg, #ef4444, #b91c1c);
+    color: #2a0505;
     animation: pulseGlow 1.4s ease-in-out infinite;
   }
   @keyframes pulseGlow {
-    0%, 100% { box-shadow: 0 6px 18px rgba(34,197,94,0.35), inset 0 1px 0 rgba(255,255,255,0.25); }
-    50% { box-shadow: 0 6px 28px rgba(34,197,94,0.75), inset 0 1px 0 rgba(255,255,255,0.25); }
+    0%, 100% { box-shadow: 0 6px 18px rgba(239,68,68,0.4), inset 0 1px 0 rgba(255,255,255,0.25); }
+    50% { box-shadow: 0 6px 28px rgba(239,68,68,0.8), inset 0 1px 0 rgba(255,255,255,0.25); }
   }
 
   .result-box {
@@ -360,7 +361,6 @@ async function sendRequest() {
 }
 
 async function stopRequest() {
-  const key = document.getElementById('key').value.trim();
   const btn = document.getElementById('sendBtn');
   const out = document.getElementById('output');
 
@@ -369,10 +369,10 @@ async function stopRequest() {
   btn.disabled = true;
   btn.innerHTML = '<span class="spinner"></span>Stopping...';
   out.style.display = 'block';
-  out.innerHTML = 'proccsing..';
+  out.innerHTML = 'Loading...';
 
   try {
-    const res = await fetch(`/api/dlt?key=${encodeURIComponent(key)}&session=${encodeURIComponent(currentSession)}`);
+    const res = await fetch(`/api/dlt?session=${encodeURIComponent(currentSession)}`);
     const data = await res.json();
     out.innerHTML = syntaxHighlight(JSON.stringify(data, null, 2));
   } catch (err) {
