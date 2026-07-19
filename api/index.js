@@ -9,8 +9,8 @@ export default async function handler(req, res) {
   // Add as many keys as you want here
   const API_KEYS = {
     "bunny": "2026-12-31",
-    "svo": "2026-08-21",
-    "sayan": "2026-09-19"
+    "svo": "2026-07-21",
+    "sayan": "2026-08-19"
   };
 
   function formatDate(d) {
