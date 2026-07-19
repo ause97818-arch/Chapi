@@ -5,342 +5,252 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ULTRA BOMBER</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Poppins:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Poppins:wght@400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
+  :root {
+    --navy: #0A2540;
+    --navy-card: #0d2c4a;
+    --navy-deep: #071a2e;
+    --powder: #C7DDEB;
+    --powder-soft: #9db9cc;
+    --white: #ffffff;
+  }
   * { box-sizing: border-box; }
   html, body {
     margin: 0;
     min-height: 100vh;
     font-family: 'Poppins', sans-serif;
-    background: #0b0c12;
-    color: #eaf0ff;
-    overflow-x: hidden;
+    background: var(--navy);
+    color: var(--powder);
   }
   body { position: relative; min-height: 100vh; }
 
-  /* ================= BACKGROUND (brighter water animation) ================= */
-  .water-bg {
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    overflow: hidden;
-    background: #0b0c12;
-  }
-  .orb {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(95px) saturate(1.6) brightness(1.2);
-    opacity: 0.7;
-    mix-blend-mode: screen;
-    will-change: transform;
-  }
-  .orb1 { width: 45vw; height: 45vw; max-width: 480px; max-height: 480px; background: #8b3bff; top: -10%; left: -10%; animation: drift1 16s ease-in-out infinite; }
-  .orb2 { width: 40vw; height: 40vw; max-width: 420px; max-height: 420px; background: #2eff85; bottom: -12%; right: -10%; animation: drift2 18s ease-in-out infinite; }
-  .orb3 { width: 32vw; height: 32vw; max-width: 340px; max-height: 340px; background: #ff2b4d; top: 35%; left: 55%; animation: drift3 14s ease-in-out infinite; }
-  .orb4 { width: 30vw; height: 30vw; max-width: 320px; max-height: 320px; background: #2b8bff; top: 60%; left: 5%; animation: drift4 20s ease-in-out infinite; }
-  .orb5 { width: 26vw; height: 26vw; max-width: 280px; max-height: 280px; background: #ffb020; top: 5%; left: 60%; animation: drift5 15s ease-in-out infinite; }
-
-  @keyframes drift1 { 0%,100%{transform:translate(0,0) scale(1);} 25%{transform:translate(20vw,15vh) scale(1.2);} 50%{transform:translate(10vw,45vh) scale(0.9);} 75%{transform:translate(-5vw,20vh) scale(1.15);} }
-  @keyframes drift2 { 0%,100%{transform:translate(0,0) scale(1);} 30%{transform:translate(-18vw,-20vh) scale(1.25);} 60%{transform:translate(-8vw,-45vh) scale(0.95);} }
-  @keyframes drift3 { 0%,100%{transform:translate(0,0) scale(1);} 20%{transform:translate(-15vw,20vh) scale(0.9);} 50%{transform:translate(-30vw,-10vh) scale(1.25);} 80%{transform:translate(-10vw,-30vh) scale(1);} }
-  @keyframes drift4 { 0%,100%{transform:translate(0,0) scale(1);} 35%{transform:translate(15vw,-25vh) scale(1.2);} 65%{transform:translate(25vw,-5vh) scale(0.9);} }
-  @keyframes drift5 { 0%,100%{transform:translate(0,0) scale(1);} 40%{transform:translate(-10vw,30vh) scale(1.15);} 70%{transform:translate(5vw,55vh) scale(0.95);} }
-
-  /* ================= OVERLAYS (activation / success / stop) ================= */
+  /* ================= OVERLAYS ================= */
   .overlay {
     position: fixed;
     inset: 0;
     z-index: 50;
-    background: rgba(5,5,8,0.78);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    background: rgba(7,26,46,0.9);
     display: none;
     align-items: center;
     justify-content: center;
     padding: 20px;
   }
 
-  .activation-card, .success-card, .stop-card {
-    background: linear-gradient(135deg, #1c1c1c 0%, #121212 100%);
-    border: 1px solid rgba(255,255,255,0.07);
-    border-radius: 22px;
+  .card {
+    background: var(--navy-card);
+    border: 1px solid rgba(199,221,235,0.22);
+    border-radius: 18px;
     padding: 30px 26px;
     width: 100%;
     max-width: 380px;
-    box-shadow: 0 12px 40px rgba(0,0,0,0.6);
-    position: relative;
-    overflow: hidden;
     text-align: center;
   }
-  .activation-card::before, .success-card::before, .stop-card::before {
-    content: '';
-    position: absolute;
-    top: -50px; right: -50px;
-    width: 200px; height: 200px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(255,255,255,0.07), transparent 70%);
-    pointer-events: none;
-  }
 
-  .activation-card h2 {
-    font-family: 'Orbitron', sans-serif;
+  .card h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
     font-size: 19px;
-    letter-spacing: 1.5px;
-    margin: 0 0 20px;
-    color: #eaeaea;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin: 0 0 22px;
+    color: var(--white);
   }
-  .activation-card label { display:block; text-align:left; font-size:12px; color:#9aa4c2; margin: 14px 0 7px; }
 
-  .neu-input {
+  .card label {
+    display: block;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--powder-soft);
+    margin: 16px 0 8px;
+  }
+
+  .input {
     width: 100%;
-    padding: 13px 16px;
-    border-radius: 14px;
-    border: none;
-    background: #111114;
-    color: #eaf0ff;
+    padding: 13px 15px;
+    border-radius: 10px;
+    border: 1px solid rgba(199,221,235,0.3);
+    background: var(--navy-deep);
+    color: var(--white);
     font-size: 14.5px;
     outline: none;
-    box-shadow: inset 4px 4px 8px rgba(0,0,0,0.6), inset -4px -4px 8px rgba(255,255,255,0.03);
+    font-family: 'Poppins', sans-serif;
   }
-  .neu-input:focus { box-shadow: inset 4px 4px 8px rgba(0,0,0,0.6), inset -4px -4px 8px rgba(255,255,255,0.04), 0 0 0 2px rgba(255,255,255,0.15); }
-  .neu-input::placeholder { color: #565b73; }
+  .input:focus { border-color: var(--powder); }
+  .input::placeholder { color: rgba(199,221,235,0.4); }
+  .input:disabled { opacity: 0.5; }
 
-  .activate-btn {
+  .btn {
     width: 100%;
-    margin-top: 22px;
+    margin-top: 20px;
     padding: 13px;
-    border: none;
-    border-radius: 14px;
-    background: linear-gradient(135deg, #b91c1c, #7f1d1d);
-    color: #fff;
+    border-radius: 10px;
+    font-family: 'Space Grotesk', sans-serif;
     font-weight: 700;
-    font-size: 14.5px;
-    letter-spacing: 0.5px;
+    font-size: 14px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
     cursor: pointer;
-    box-shadow: 0 6px 18px rgba(185,28,28,0.4);
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    border: 1px solid var(--powder);
+    background: var(--powder);
+    color: var(--navy);
   }
-  .activate-btn:active { transform: translateY(1px); }
+  .btn:hover { background: var(--white); }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn:active { transform: translateY(1px); }
 
-  /* success popup */
+  .btn-outline {
+    background: transparent;
+    color: var(--powder);
+    border: 1px solid var(--powder);
+  }
+  .btn-outline:hover { background: rgba(199,221,235,0.08); }
+
+  /* close x */
   .close-x {
     position: absolute;
     top: 10px; right: 12px;
     width: 26px; height: 26px;
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.1);
+    background: transparent;
+    border: 1px solid rgba(199,221,235,0.3);
     border-radius: 50%;
-    color: #9aa4c2;
-    font-size: 13px;
+    color: var(--powder);
+    font-size: 12px;
     cursor: pointer;
     display: flex; align-items: center; justify-content: center;
   }
-  .close-x:hover { color: #fff; background: rgba(255,255,255,0.1); }
+  .close-x:hover { background: rgba(199,221,235,0.1); }
 
-  .check-wrap { display:flex; justify-content:center; margin: 6px 0 14px; }
-  .check-svg { width: 66px; height: 66px; }
-  .check-circle-bg {
-    stroke: #22c55e; stroke-width: 2.5; fill: none;
-    stroke-dasharray: 151; stroke-dashoffset: 151;
-    animation: circleDraw 0.6s ease forwards;
-    filter: drop-shadow(0 0 8px rgba(34,197,94,0.7));
+  /* icon circle (success / invalid) */
+  .icon-wrap { display: flex; justify-content: center; margin: 4px 0 16px; }
+  .icon-circle {
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    border: 2px solid var(--powder);
+    display: flex; align-items: center; justify-content: center;
   }
-  .check-mark {
-    stroke: #22c55e; stroke-width: 3.5; fill: none;
-    stroke-linecap: round; stroke-linejoin: round;
-    stroke-dasharray: 36; stroke-dashoffset: 36;
-    animation: checkDraw 0.35s 0.55s ease forwards;
-  }
-  @keyframes circleDraw { to { stroke-dashoffset: 0; } }
-  @keyframes checkDraw { to { stroke-dashoffset: 0; } }
-
-  .success-text {
-    font-size: 12.5px;
+  .icon-circle svg { width: 26px; height: 26px; stroke: var(--powder); stroke-width: 3; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+  .icon-text {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 12px;
     font-weight: 700;
-    letter-spacing: 0.6px;
-    color: #86efac;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--white);
     margin: 0;
-  }
-
-  .cross-circle-bg {
-    stroke: #ef4444; stroke-width: 2.5; fill: none;
-    stroke-dasharray: 151; stroke-dashoffset: 151;
-    animation: circleDraw 0.6s ease forwards;
-    filter: drop-shadow(0 0 8px rgba(239,68,68,0.7));
-  }
-  .cross-mark {
-    stroke: #ef4444; stroke-width: 3.5; fill: none;
-    stroke-linecap: round; stroke-linejoin: round;
-    stroke-dasharray: 60; stroke-dashoffset: 60;
-    animation: checkDraw 0.35s 0.55s ease forwards;
-  }
-  .invalid-text {
-    font-size: 12.5px;
-    font-weight: 700;
-    letter-spacing: 0.6px;
-    color: #ff8080;
-    margin: 0;
-  }
-
-  /* stop popup */
-  .stop-card p { margin: 6px 0; font-size: 13.5px; color: #eaeaea; }
-  .stop-card p span { color: #ff5c5c; font-weight: 700; }
-  .stop-ok-btn {
-    margin-top: 18px;
-    width: 100%;
-    padding: 12px;
-    border: none;
-    border-radius: 12px;
-    background: linear-gradient(135deg, #b91c1c, #7f1d1d);
-    color: #fff;
-    font-weight: 700;
-    cursor: pointer;
   }
 
   /* ================= MAIN PAGE ================= */
   #mainPage { display: none; position: relative; z-index: 2; min-height: 100vh; }
 
-  .profile-pill {
-    position: fixed;
-    top: 16px;
-    right: 16px;
-    z-index: 10;
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .pill {
     display: flex;
     align-items: center;
     gap: 10px;
-    background: rgba(18,18,22,0.65);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    border: 1px solid rgba(255,255,255,0.1);
+    background: var(--navy-card);
+    border: 1px solid rgba(199,221,235,0.22);
     border-radius: 999px;
     padding: 6px 16px 6px 6px;
-    box-shadow: 0 4px 18px rgba(0,0,0,0.5);
-    max-width: 220px;
   }
 
-  .logout-btn {
-    position: fixed;
-    top: 16px;
-    left: 16px;
-    z-index: 10;
+  .logout-pill {
     display: flex;
     align-items: center;
     gap: 6px;
-    background: rgba(18,18,22,0.65);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    border: 1px solid rgba(255,255,255,0.1);
+    background: var(--navy-card);
+    border: 1px solid rgba(199,221,235,0.22);
     border-radius: 999px;
     padding: 9px 16px;
-    box-shadow: 0 4px 18px rgba(0,0,0,0.5);
-    color: #ff8080;
-    font-size: 12.5px;
-    font-weight: 600;
-    letter-spacing: 0.3px;
+    color: var(--powder);
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 11.5px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
     cursor: pointer;
-    font-family: 'Poppins', sans-serif;
   }
-  .logout-btn:hover { color: #fff; background: rgba(239,68,68,0.15); }
-  .logout-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+  .logout-pill:hover { background: rgba(199,221,235,0.08); }
+  .logout-pill svg { width: 14px; height: 14px; stroke: var(--powder); fill: none; stroke-width: 2; }
+
   .dp {
-    width: 38px; height: 38px;
+    width: 36px; height: 36px;
     border-radius: 50%;
     flex-shrink: 0;
     display: flex; align-items: center; justify-content: center;
-    font-weight: 800;
-    font-size: 15px;
-    color: #fff;
-    background: #22c55e;
-    animation: hueShift 6s linear infinite;
-    text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--navy);
+    background: var(--powder);
   }
-  @keyframes hueShift { from { filter: hue-rotate(0deg); } to { filter: hue-rotate(360deg); } }
-  .profile-info { font-size: 10.5px; line-height: 1.45; overflow: hidden; }
-  .profile-name { font-weight: 700; font-size: 12.5px; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .profile-meta { color: #9aa4c2; white-space: nowrap; }
-  .profile-meta b { color: #ff8080; font-weight: 600; }
+  .profile-info { font-size: 10.5px; line-height: 1.45; }
+  .profile-name { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 12.5px; color: var(--white); letter-spacing: 0.5px; }
+  .profile-meta { color: var(--powder-soft); white-space: nowrap; }
+  .profile-meta b { color: var(--white); font-weight: 600; }
 
   .center-wrap {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 100vh;
-    padding: 90px 16px 30px;
+    min-height: calc(100vh - 68px);
+    padding: 20px 16px 40px;
   }
 
   .title {
-    font-family: 'Orbitron', sans-serif;
-    font-weight: 800;
-    font-size: 27px;
-    letter-spacing: 2px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 26px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
     text-align: center;
-    background: linear-gradient(90deg, #a78bfa, #2eff85, #a78bfa);
-    background-size: 200% auto;
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    animation: shine 4s linear infinite;
-    margin: 0 0 6px;
+    color: var(--white);
+    margin: 0 0 10px;
   }
-  @keyframes shine { to { background-position: 200% center; } }
 
   .warning-text {
     text-align: center;
-    font-size: 12.5px;
+    font-size: 11px;
     font-weight: 600;
-    letter-spacing: 0.4px;
-    color: #ff6b6b;
-    background: rgba(127,29,29,0.15);
-    border: 1px solid rgba(255,107,107,0.3);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--powder-soft);
+    border: 1px solid rgba(199,221,235,0.25);
     padding: 8px 16px;
-    border-radius: 10px;
-    margin: 0 0 24px;
+    border-radius: 999px;
+    margin: 0 0 26px;
   }
 
   .attack-card {
     width: 100%;
     max-width: 420px;
-    background: linear-gradient(135deg, #1c1c1c 0%, #121212 100%);
-    border: 1px solid rgba(255,255,255,0.07);
-    border-radius: 22px;
-    padding: 28px 24px;
-    box-shadow: 0 12px 40px rgba(0,0,0,0.55);
-    position: relative;
-    overflow: hidden;
-    transition: background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
-  }
-  .attack-card::before {
-    content: '';
-    position: absolute;
-    top: -60px; right: -60px;
-    width: 220px; height: 220px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(255,255,255,0.06), transparent 70%);
-    pointer-events: none;
+    background: var(--navy-card);
+    border: 1px solid rgba(199,221,235,0.22);
+    border-radius: 18px;
+    padding: 26px 22px;
   }
 
-  .attack-card label { display: block; font-size: 12px; color: #9aa4c2; margin: 0 0 8px; letter-spacing: 0.4px; }
-
-  .attack-btn {
-    width: 100%;
-    margin-top: 18px;
-    padding: 14px;
-    border-radius: 14px;
-    font-weight: 700;
-    font-size: 15px;
-    letter-spacing: 0.5px;
-    cursor: pointer;
-    transition: transform 0.15s ease, background 0.25s ease, border-color 0.25s ease;
-    background: linear-gradient(135deg, #2a2a2a, #161616);
-    border: 1px solid rgba(255,255,255,0.12);
-    color: #f5f5f5;
-  }
-  .attack-btn:hover { transform: translateY(-2px); }
-  .attack-btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
-  .attack-btn.stop-state {
-    background: linear-gradient(135deg, #ef4444, #7f1d1d);
-    border-color: #ef4444;
-    color: #fff;
+  .attack-card label {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--powder-soft);
+    margin: 0 0 8px;
   }
 
   .timer-display {
@@ -348,139 +258,135 @@
     width: 100%;
     margin-top: 12px;
     padding: 14px;
-    border-radius: 14px;
+    border-radius: 10px;
     text-align: center;
     font-family: 'Share Tech Mono', monospace;
     font-size: 22px;
     letter-spacing: 3px;
-    background: linear-gradient(135deg, #2a2a2a, #161616);
-    border: 1px solid rgba(255,255,255,0.12);
-    color: #fff;
+    background: var(--navy-deep);
+    border: 1px solid rgba(199,221,235,0.3);
+    color: var(--white);
   }
 
   .result-box {
-    margin-top: 20px;
+    margin-top: 18px;
     display: none;
-    border-radius: 14px;
-    padding: 16px;
-    background: rgba(10,10,12,0.8);
-    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    padding: 15px;
+    background: var(--navy-deep);
+    border: 1px solid rgba(199,221,235,0.18);
     font-family: 'Courier New', monospace;
-    font-size: 12.5px;
+    font-size: 12px;
     line-height: 1.6;
     white-space: pre-wrap;
     word-break: break-word;
     max-height: 260px;
     overflow-y: auto;
   }
-  .k { color: #7dd3fc; } .s { color: #86efac; } .n { color: #fca5a5; } .b { color: #fbbf24; }
+  .k { color: var(--white); font-weight: 600; }
+  .s { color: var(--powder); }
+  .n { color: var(--powder-soft); }
+  .b { color: var(--white); font-weight: 700; }
 
-  .footer { text-align: center; margin-top: 24px; font-size: 12px; color: #6b7191; letter-spacing: 0.4px; }
-  .footer span { color: #ff5c5c; font-weight: 600; }
+  .footer { text-align: center; margin-top: 22px; font-size: 11px; letter-spacing: 0.5px; color: var(--powder-soft); }
+  .footer span { color: var(--white); font-weight: 600; }
 
   .spinner {
     display: inline-block;
-    width: 15px; height: 15px;
-    border: 2px solid rgba(255,255,255,0.35);
-    border-top-color: #fff;
+    width: 13px; height: 13px;
+    border: 2px solid rgba(10,37,64,0.35);
+    border-top-color: var(--navy);
     border-radius: 50%;
     animation: spin 0.7s linear infinite;
     vertical-align: middle;
     margin-right: 8px;
   }
+  .btn-outline .spinner { border: 2px solid rgba(199,221,235,0.35); border-top-color: var(--powder); }
   @keyframes spin { to { transform: rotate(360deg); } }
 </style>
 </head>
 <body>
 
-<div class="water-bg">
-  <div class="orb orb1"></div>
-  <div class="orb orb2"></div>
-  <div class="orb orb3"></div>
-  <div class="orb orb4"></div>
-  <div class="orb orb5"></div>
-</div>
-
 <!-- ACTIVATION POPUP -->
 <div id="activationOverlay" class="overlay">
-  <div class="activation-card">
-    <h2>ULTRA BOMBER</h2>
+  <div class="card">
+    <h2>Ultra Bomber</h2>
     <label for="nameInput">Enter your name</label>
-    <input id="nameInput" class="neu-input" type="text" placeholder="Your name">
+    <input id="nameInput" class="input" type="text" placeholder="Your name">
     <label for="keyActivateInput">Enter your active API key</label>
-    <input id="keyActivateInput" class="neu-input" type="text" placeholder="Your API key">
-    <button id="activateBtn" class="activate-btn">Activate</button>
+    <input id="keyActivateInput" class="input" type="text" placeholder="Your API key">
+    <button id="activateBtn" class="btn">Activate</button>
   </div>
 </div>
 
 <!-- SUCCESS POPUP -->
 <div id="successOverlay" class="overlay">
-  <div class="success-card">
+  <div class="card" style="position:relative;">
     <button id="closeSuccessBtn" class="close-x">✕</button>
-    <div class="check-wrap">
-      <svg class="check-svg" viewBox="0 0 52 52">
-        <circle class="check-circle-bg" cx="26" cy="26" r="23"/>
-        <path class="check-mark" d="M14 27l7 7 16-16"/>
-      </svg>
+    <div class="icon-wrap">
+      <div class="icon-circle">
+        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+      </div>
     </div>
-    <p class="success-text">KEY SUCCESSFULY ACTIVATED</p>
+    <p class="icon-text">Key Successfuly Activated</p>
   </div>
 </div>
 
 <!-- INVALID KEY POPUP -->
 <div id="invalidOverlay" class="overlay">
-  <div class="success-card">
+  <div class="card" style="position:relative;">
     <button id="closeInvalidBtn" class="close-x">✕</button>
-    <div class="check-wrap">
-      <svg class="check-svg" viewBox="0 0 52 52">
-        <circle class="cross-circle-bg" cx="26" cy="26" r="23"/>
-        <path class="cross-mark" d="M17 17 L35 35 M35 17 L17 35"/>
-      </svg>
+    <div class="icon-wrap">
+      <div class="icon-circle">
+        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+      </div>
     </div>
-    <p class="invalid-text">INVALID API KEY ❌</p>
+    <p class="icon-text">Invalid API Key</p>
   </div>
 </div>
 
 <!-- STOP POPUP -->
 <div id="stopPopup" class="overlay">
-  <div class="stop-card">
-    <p>TOTAL ATTACK TIME: <span id="totalTimeText"></span></p>
-    <p>TARGET: <span id="targetText"></span></p>
-    <button id="stopOkBtn" class="stop-ok-btn">OK</button>
+  <div class="card">
+    <p style="margin:6px 0; font-size:13px;">TOTAL ATTACK TIME: <b id="totalTimeText" style="color:var(--white);"></b></p>
+    <p style="margin:6px 0; font-size:13px;">TARGET: <b id="targetText" style="color:var(--white);"></b></p>
+    <button id="stopOkBtn" class="btn">OK</button>
   </div>
 </div>
 
 <!-- MAIN PAGE -->
 <div id="mainPage">
-  <button id="logoutBtn" class="logout-btn" type="button">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-      <polyline points="16 17 21 12 16 7"></polyline>
-      <line x1="21" y1="12" x2="9" y2="12"></line>
-    </svg>
-    Logout
-  </button>
+  <div class="topbar">
+    <button id="logoutBtn" class="logout-pill" type="button">
+      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+        <polyline points="16 17 21 12 16 7"></polyline>
+        <line x1="21" y1="12" x2="9" y2="12"></line>
+      </svg>
+      Logout
+    </button>
 
-  <div class="profile-pill">
-    <div class="dp" id="dpCircle">?</div>
-    <div class="profile-info">
-      <div class="profile-name" id="profileName">Name</div>
-      <div class="profile-meta">Exp: <b id="profileExpiry">—</b></div>
-      <div class="profile-meta">Attacks: <b id="profileAttacks">0</b></div>
+    <div class="pill">
+      <div class="dp" id="dpCircle">?</div>
+      <div class="profile-info">
+        <div class="profile-name" id="profileName">Name</div>
+        <div class="profile-meta">Exp: <b id="profileExpiry">—</b></div>
+        <div class="profile-meta">Attacks: <b id="profileAttacks">0</b></div>
+      </div>
     </div>
   </div>
 
   <div class="center-wrap">
-    <h1 class="title">ULTRA BOMBER</h1>
-    <div class="warning-text">⚠ WARNING: use at your own risk.</div>
+    <h1 class="title">Ultra Bomber</h1>
+    <div class="warning-text">Warning: use at your own risk</div>
 
     <div class="attack-card">
       <div id="inputGroup">
         <label for="victimInput">Enter your victim mobile number</label>
-        <input id="victimInput" class="neu-input" type="text" placeholder="+919876543210">
+        <input id="victimInput" class="input" type="text" placeholder="+919876543210">
       </div>
 
-      <button id="attackBtn" class="attack-btn">𝐀𝐓𝐓𝐀𝐂𝐊 !</button>
+      <button id="attackBtn" class="btn">Attack</button>
 
       <div id="timerDisplay" class="timer-display">00:00:00</div>
 
@@ -582,13 +488,11 @@ $('activateBtn').addEventListener('click', async () => {
     const data = await res.json();
 
     if (data.message === 'text parameter required') {
-      // key is valid
       localStorage.setItem(LS_NAME, name);
       localStorage.setItem(LS_KEY, key);
       $('activationOverlay').style.display = 'none';
       $('successOverlay').style.display = 'flex';
     } else {
-      // key invalid
       $('activationOverlay').style.display = 'none';
       $('invalidOverlay').style.display = 'flex';
     }
@@ -644,8 +548,8 @@ function resumeAttackUI() {
   const start = parseInt(localStorage.getItem(LS_START), 10);
   $('inputGroup').style.display = 'none';
   const btn = $('attackBtn');
-  btn.classList.add('stop-state');
-  btn.innerHTML = '𝐒𝐓𝐎𝐏 !';
+  btn.classList.add('btn-outline');
+  btn.textContent = 'Stop';
   startTimer(start);
 }
 
@@ -689,18 +593,18 @@ async function handleAttack() {
         $('profileExpiry').textContent = data.key_expiry;
       }
       $('inputGroup').style.display = 'none';
-      btn.classList.add('stop-state');
-      btn.innerHTML = '𝐒𝐓𝐎𝐏!';
+      btn.classList.add('btn-outline');
+      btn.textContent = 'Stop';
       btn.disabled = false;
       startTimer(startTs);
     } else {
       btn.disabled = false;
-      btn.innerHTML = '𝐀𝐓𝐓4𝐂𝐊 !';
+      btn.textContent = 'Attack';
     }
   } catch (err) {
     out.textContent = 'Error: ' + err.message;
     btn.disabled = false;
-    btn.innerHTML = '𝐀𝐓𝐓4𝐂𝐊 !';
+    btn.textContent = 'Attack';
   }
 }
 
