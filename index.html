@@ -3,98 +3,231 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bunny API</title>
+<title>ULTRA BOMBER</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; }
-  body {
+  html, body {
     margin: 0;
     min-height: 100vh;
+    font-family: 'Poppins', sans-serif;
+    background: #0b0c12;
+    color: #eaf0ff;
+    overflow-x: hidden;
+  }
+  body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #0d1117;
-    font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-    color: #e6edf3;
-    padding: 20px;
+    padding: 30px 16px;
+    position: relative;
   }
-  .card {
-    background: #161b22;
-    border: 1px solid #22c55e33;
-    border-radius: 14px;
-    padding: 28px;
+
+  /* animated glow orbs */
+  .orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(90px);
+    opacity: 0.45;
+    z-index: 0;
+    animation: float 10s ease-in-out infinite;
+  }
+  .orb1 { width: 320px; height: 320px; background: #7c3aed; top: -80px; left: -80px; }
+  .orb2 { width: 280px; height: 280px; background: #22c55e; bottom: -60px; right: -60px; animation-delay: 2s; }
+  .orb3 { width: 220px; height: 220px; background: #ef4444; top: 40%; left: 60%; animation-delay: 4s; }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0) translateX(0); }
+    50% { transform: translateY(-25px) translateX(15px); }
+  }
+
+  .wrap {
+    position: relative;
+    z-index: 2;
     width: 100%;
-    max-width: 420px;
-    box-shadow: 0 0 30px #22c55e1a;
+    max-width: 440px;
   }
-  h1 {
-    margin: 0 0 6px;
-    font-size: 22px;
-    color: #22c55e;
+
+  .card {
+    background: rgba(22, 24, 34, 0.55);
+    backdrop-filter: blur(22px);
+    -webkit-backdrop-filter: blur(22px);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 22px;
+    padding: 30px 26px;
+    box-shadow:
+      0 8px 32px rgba(0,0,0,0.55),
+      inset 0 1px 0 rgba(255,255,255,0.06);
   }
-  p.sub {
-    margin: 0 0 20px;
-    color: #8b949e;
-    font-size: 14px;
+
+  .title {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 800;
+    font-size: 26px;
+    letter-spacing: 2px;
+    text-align: center;
+    background: linear-gradient(90deg, #a78bfa, #22c55e, #a78bfa);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: shine 4s linear infinite;
+    margin: 0;
   }
+  @keyframes shine {
+    to { background-position: 200% center; }
+  }
+
+  .subtitle {
+    text-align: center;
+    color: #9aa4c2;
+    font-size: 12.5px;
+    margin: 6px 0 26px;
+    letter-spacing: 0.5px;
+  }
+
   label {
     display: block;
-    font-size: 13px;
-    color: #8b949e;
-    margin: 14px 0 6px;
+    font-size: 12.5px;
+    color: #9aa4c2;
+    margin: 16px 0 8px;
+    letter-spacing: 0.4px;
   }
-  input {
+
+  .neu-input {
     width: 100%;
-    padding: 10px 12px;
-    border-radius: 8px;
-    border: 1px solid #30363d;
-    background: #0d1117;
-    color: #e6edf3;
-    font-size: 14px;
-    outline: none;
-  }
-  input:focus { border-color: #22c55e; }
-  button {
-    width: 100%;
-    margin-top: 20px;
-    padding: 11px;
+    padding: 13px 16px;
+    border-radius: 14px;
     border: none;
-    border-radius: 8px;
-    background: #22c55e;
-    color: #0d1117;
-    font-weight: 600;
-    font-size: 15px;
-    cursor: pointer;
+    background: #14151d;
+    color: #eaf0ff;
+    font-size: 14.5px;
+    outline: none;
+    box-shadow:
+      inset 4px 4px 8px rgba(0,0,0,0.55),
+      inset -4px -4px 8px rgba(255,255,255,0.03);
+    transition: box-shadow 0.25s ease;
   }
-  button:disabled { opacity: 0.6; cursor: not-allowed; }
-  pre {
-    margin-top: 18px;
-    background: #0d1117;
-    border: 1px solid #30363d;
-    border-radius: 8px;
+  .neu-input:focus {
+    box-shadow:
+      inset 4px 4px 8px rgba(0,0,0,0.6),
+      inset -4px -4px 8px rgba(255,255,255,0.04),
+      0 0 0 2px #22c55e55;
+  }
+  .neu-input::placeholder { color: #565b73; }
+
+  button.send {
+    width: 100%;
+    margin-top: 24px;
     padding: 14px;
+    border: none;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #22c55e, #16a34a);
+    color: #06170c;
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    box-shadow:
+      0 6px 18px rgba(34,197,94,0.35),
+      inset 0 1px 0 rgba(255,255,255,0.25);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  button.send:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(34,197,94,0.45); }
+  button.send:active { transform: translateY(0); }
+  button.send:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+
+  .result-box {
+    margin-top: 22px;
+    display: none;
+    border-radius: 16px;
+    padding: 18px;
+    background: rgba(13,14,20,0.75);
+    border: 1px solid rgba(255,255,255,0.07);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02);
+    font-family: 'Courier New', monospace;
     font-size: 13px;
+    line-height: 1.65;
     white-space: pre-wrap;
     word-break: break-word;
-    display: none;
+    animation: fadeIn 0.4s ease;
   }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .k { color: #7dd3fc; }
+  .s { color: #86efac; }
+  .n { color: #fca5a5; }
+  .b { color: #fbbf24; }
+
+  .footer {
+    text-align: center;
+    margin-top: 26px;
+    font-size: 12px;
+    color: #6b7191;
+    letter-spacing: 0.4px;
+  }
+  .footer span { color: #22c55e; font-weight: 600; }
+
+  .spinner {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    border: 2px solid rgba(6,23,12,0.4);
+    border-top-color: #06170c;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    vertical-align: middle;
+    margin-right: 8px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
 </style>
 </head>
 <body>
+
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="orb orb3"></div>
+
+<div class="wrap">
   <div class="card">
-    <h1>🐰 Bunny API</h1>
-    <p class="sub">Enter your API key and text</p>
+    <h1 class="title">ULTRA BOMBER</h1>
+    <p class="subtitle">Enter your API key and mobile number</p>
 
     <label for="key">API Key</label>
-    <input id="key" type="text" placeholder="your key">
+    <input id="key" class="neu-input" type="text" placeholder="your key">
 
-    <label for="text">Text</label>
-    <input id="text" type="text" placeholder="hii">
+    <label for="text">Mobile Number</label>
+    <input id="text" class="neu-input" type="text" placeholder="+919876543210">
 
-    <button id="sendBtn" onclick="sendRequest()">Send</button>
-    <pre id="output"></pre>
+    <button class="send" id="sendBtn" onclick="sendRequest()">🚀 Send</button>
+
+    <div id="output" class="result-box"></div>
   </div>
 
+  <div class="footer">Develope by <span>@th3bunny</span></div>
+</div>
+
 <script>
+function syntaxHighlight(json) {
+  json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  return json.replace(
+    /("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false)\b|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g,
+    function (match) {
+      let cls = 'n';
+      if (/^"/.test(match)) {
+        cls = /:$/.test(match) ? 'k' : 's';
+      } else if (/true|false/.test(match)) {
+        cls = 'b';
+      }
+      return '<span class="' + cls + '">' + match + '</span>';
+    }
+  );
+}
+
 async function sendRequest() {
   const key = document.getElementById('key').value.trim();
   const text = document.getElementById('text').value.trim();
@@ -103,24 +236,24 @@ async function sendRequest() {
 
   if (!key || !text) {
     out.style.display = 'block';
-    out.textContent = 'Please enter both key and text.';
+    out.innerHTML = '⚠️ Please enter both key and mobile number.';
     return;
   }
 
   btn.disabled = true;
-  btn.textContent = 'Sending...';
+  btn.innerHTML = '<span class="spinner"></span>Sending...';
   out.style.display = 'block';
-  out.textContent = 'Loading...';
+  out.innerHTML = 'Loading...';
 
   try {
     const res = await fetch(`/api?key=${encodeURIComponent(key)}&text=${encodeURIComponent(text)}`);
     const data = await res.json();
-    out.textContent = JSON.stringify(data, null, 2);
+    out.innerHTML = syntaxHighlight(JSON.stringify(data, null, 2));
   } catch (err) {
-    out.textContent = 'Error: ' + err.message;
+    out.innerHTML = '❌ Error: ' + err.message;
   } finally {
     btn.disabled = false;
-    btn.textContent = 'Send';
+    btn.innerHTML = '🚀 Send';
   }
 }
 </script>
