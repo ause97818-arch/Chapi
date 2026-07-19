@@ -3,7 +3,7 @@ export default async function handler(req, res) {
   let text = req.query.text;
 
   // ===== KEY SYSTEM =====
-  const validKeys = (process.env.API_KEYS || "bunny").split(",").map(k => k.trim());
+  const validKeys = (process.env.API_KEYS || "sayan").split(",").map(k => k.trim());
 
   if (!key || !validKeys.includes(key)) {
     return res.status(401).json({
