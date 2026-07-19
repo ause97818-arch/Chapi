@@ -216,6 +216,31 @@
     box-shadow: 0 4px 18px rgba(0,0,0,0.5);
     max-width: 220px;
   }
+
+  .logout-btn {
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(18,18,22,0.65);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 999px;
+    padding: 9px 16px;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.5);
+    color: #ff8080;
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+  }
+  .logout-btn:hover { color: #fff; background: rgba(239,68,68,0.15); }
+  .logout-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
   .dp {
     width: 38px; height: 38px;
     border-radius: 50%;
@@ -224,11 +249,11 @@
     font-weight: 800;
     font-size: 15px;
     color: #fff;
-    background: conic-gradient(from 0deg, #8b3bff, #2eff85, #ff2b4d, #2b8bff, #8b3bff);
-    animation: hueShift 5s linear infinite;
+    background: #22c55e;
+    animation: hueShift 6s linear infinite;
     text-shadow: 0 1px 3px rgba(0,0,0,0.5);
   }
-  @keyframes hueShift { to { filter: hue-rotate(360deg); } }
+  @keyframes hueShift { from { filter: hue-rotate(0deg); } to { filter: hue-rotate(360deg); } }
   .profile-info { font-size: 10.5px; line-height: 1.45; overflow: hidden; }
   .profile-name { font-weight: 700; font-size: 12.5px; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .profile-meta { color: #9aa4c2; white-space: nowrap; }
@@ -292,15 +317,6 @@
     border-radius: 50%;
     background: radial-gradient(circle, rgba(255,255,255,0.06), transparent 70%);
     pointer-events: none;
-    transition: background 0.4s ease;
-  }
-  .attack-card.card-red {
-    background: linear-gradient(135deg, #4a0e0e 0%, #260707 100%);
-    border-color: rgba(255,80,80,0.3);
-    box-shadow: 0 12px 40px rgba(139,0,0,0.4), 0 0 30px rgba(239,68,68,0.25);
-  }
-  .attack-card.card-red::before {
-    background: radial-gradient(circle, rgba(255,90,90,0.3), transparent 70%);
   }
 
   .attack-card label { display: block; font-size: 12px; color: #9aa4c2; margin: 0 0 8px; letter-spacing: 0.4px; }
@@ -438,6 +454,15 @@
 
 <!-- MAIN PAGE -->
 <div id="mainPage">
+  <button id="logoutBtn" class="logout-btn" type="button">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+      <polyline points="16 17 21 12 16 7"></polyline>
+      <line x1="21" y1="12" x2="9" y2="12"></line>
+    </svg>
+    Logout
+  </button>
+
   <div class="profile-pill">
     <div class="dp" id="dpCircle">?</div>
     <div class="profile-info">
@@ -605,7 +630,6 @@ function resumeAttackUI() {
   const btn = $('attackBtn');
   btn.classList.add('stop-state');
   btn.innerHTML = '🛑 STOP !';
-  document.querySelector('.attack-card').classList.add('card-red');
   startTimer(start);
 }
 
@@ -648,18 +672,17 @@ async function handleAttack() {
       }
       $('inputGroup').style.display = 'none';
       btn.classList.add('stop-state');
-      btn.innerHTML = 'STOP !';
+      btn.innerHTML = '🛑 STOP !';
       btn.disabled = false;
-      document.querySelector('.attack-card').classList.add('card-red');
       startTimer(startTs);
     } else {
       btn.disabled = false;
-      btn.innerHTML = 'ATTACK !';
+      btn.innerHTML = '🚀 ATTACK !';
     }
   } catch (err) {
     out.textContent = 'Error: ' + err.message;
     btn.disabled = false;
-    btn.innerHTML = 'ATTACK !';
+    btn.innerHTML = '🚀 ATTACK !';
   }
 }
 
@@ -682,7 +705,6 @@ async function handleStop() {
   }
 
   stopTimerDisplay();
-  document.querySelector('.attack-card').classList.remove('card-red');
   const totalMs = Date.now() - start;
 
   const attacks = parseInt(localStorage.getItem(LS_ATTACKS) || '0', 10) + 1;
@@ -700,6 +722,11 @@ async function handleStop() {
 
 $('stopOkBtn').addEventListener('click', () => {
   $('stopPopup').style.display = 'none';
+  location.reload();
+});
+
+$('logoutBtn').addEventListener('click', () => {
+  localStorage.clear();
   location.reload();
 });
 </script>
