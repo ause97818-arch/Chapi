@@ -13,8 +13,13 @@ export default async function handler(req, res) {
     const upstream = await fetch(upstreamUrl);
     const data = await upstream.json();
 
+    const response = {
+      ...data,
+      creator: "@th3bunny | BUNNY M"
+    };
+
     res.setHeader("Content-Type", "application/json");
-    return res.status(200).send(JSON.stringify(data, null, 2));
+    return res.status(200).send(JSON.stringify(response, null, 2));
   } catch (err) {
     return res.status(500).json({
       status: false,
