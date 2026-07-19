@@ -8,7 +8,7 @@ export default async function handler(req, res) {
   // Format: "keyname": "YYYY-MM-DD"  → key valid till end of that day
   // Add as many keys as you want here
   const API_KEYS = {
-    "bunny": "2026-12-31",
+    "bunny20099": "2026-12-31",
     "svo": "2026-07-21",
     "sayan": "2026-08-19"
   };
