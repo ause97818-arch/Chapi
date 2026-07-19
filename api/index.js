@@ -2,9 +2,7 @@ export default async function handler(req, res) {
   const { key, text } = req.query;
 
   // ===== KEY SYSTEM =====
-  // Valid keys env var me comma se separate rakho (Vercel dashboard > Settings > Environment Variables)
-  // Agar env set nahi hai to default "bunny" use hoga
-  const validKeys = (process.env.API_KEYS || "sayan").split(",").map(k => k.trim());
+  const validKeys = (process.env.API_KEYS || "Sayan").split(",").map(k => k.trim());
 
   if (!key || !validKeys.includes(key)) {
     return res.status(401).json({
@@ -17,6 +15,17 @@ export default async function handler(req, res) {
     return res.status(400).json({
       status: false,
       message: "text parameter required"
+    });
+  }
+
+  // ===== MOBILE NUMBER ONLY VALIDATION =====
+  // Must start with + followed by 7 to 15 digits (E.164 format, any country)
+  const phoneRegex = /^\+[1-9]\d{6,14}$/;
+
+  if (!phoneRegex.test(text)) {
+    return res.status(400).json({
+      status: false,
+      message: "Only mobile number allowed ❌ (format: +countrycode number, e.g. +919876543210)"
     });
   }
 
@@ -34,7 +43,6 @@ export default async function handler(req, res) {
       creator: "@th3bunny | BUNNY M"
     };
 
-    // Pretty print JSON
     res.setHeader("Content-Type", "application/json");
     return res.status(200).send(JSON.stringify(response, null, 2));
   } catch (err) {
@@ -45,3 +53,4 @@ export default async function handler(req, res) {
     });
   }
 }
+
