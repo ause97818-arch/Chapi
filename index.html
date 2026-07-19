@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ULTRA BOMBER</title>
+<title>ULTRA</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800&family=Poppins:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
@@ -406,7 +406,7 @@
 <!-- ACTIVATION POPUP -->
 <div id="activationOverlay" class="overlay">
   <div class="activation-card">
-    <h2>ULTRA BOMBER</h2>
+    <h2>ULTRA</h2>
     <label for="nameInput">Enter your name</label>
     <input id="nameInput" class="neu-input" type="text" placeholder="Your name">
     <label for="keyActivateInput">Enter your active API key</label>
@@ -473,7 +473,7 @@
   </div>
 
   <div class="center-wrap">
-    <h1 class="title">ULTRA BOMBER</h1>
+    <h1 class="title">ULTRA</h1>
     <div class="warning-text">⚠ WARNING: use at your own risk.</div>
 
     <div class="attack-card">
@@ -484,7 +484,7 @@
 
       <div id="timerDisplay" class="timer-display">00:00:00</div>
 
-      <button id="attackBtn" class="attack-btn">🚀 ATTACK !</button>
+      <button id="attackBtn" class="attack-btn">CHEAK!</button>
 
       <div id="responseBox" class="result-box"></div>
     </div>
@@ -677,12 +677,12 @@ async function handleAttack() {
       startTimer(startTs);
     } else {
       btn.disabled = false;
-      btn.innerHTML = '🚀 ATTACK !';
+      btn.innerHTML = 'CHEAK';
     }
   } catch (err) {
     out.textContent = 'Error: ' + err.message;
     btn.disabled = false;
-    btn.innerHTML = '🚀 ATTACK !';
+    btn.innerHTML = 'CHEAK !';
   }
 }
 
