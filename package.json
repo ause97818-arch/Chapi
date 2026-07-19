@@ -1,0 +1,6 @@
+{
+  "name": "bunny-api",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Key-protected proxy API for post channel"
+}
