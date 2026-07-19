@@ -102,7 +102,7 @@
     outline: none;
     box-shadow: inset 4px 4px 8px rgba(0,0,0,0.6), inset -4px -4px 8px rgba(255,255,255,0.03);
   }
-  .neu-input:focus { box-shadow: inset 4px 4px 8px rgba(0,0,0,0.6), inset -4px -4px 8px rgba(255,255,255,0.04), 0 0 0 2px #7f1d1d88; }
+  .neu-input:focus { box-shadow: inset 4px 4px 8px rgba(0,0,0,0.6), inset -4px -4px 8px rgba(255,255,255,0.04), 0 0 0 2px rgba(255,255,255,0.15); }
   .neu-input::placeholder { color: #565b73; }
 
   .activate-btn {
@@ -158,6 +158,26 @@
     font-weight: 700;
     letter-spacing: 0.6px;
     color: #86efac;
+    margin: 0;
+  }
+
+  .cross-circle-bg {
+    stroke: #ef4444; stroke-width: 2.5; fill: none;
+    stroke-dasharray: 151; stroke-dashoffset: 151;
+    animation: circleDraw 0.6s ease forwards;
+    filter: drop-shadow(0 0 8px rgba(239,68,68,0.7));
+  }
+  .cross-mark {
+    stroke: #ef4444; stroke-width: 3.5; fill: none;
+    stroke-linecap: round; stroke-linejoin: round;
+    stroke-dasharray: 60; stroke-dashoffset: 60;
+    animation: checkDraw 0.35s 0.55s ease forwards;
+  }
+  .invalid-text {
+    font-size: 12.5px;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    color: #ff8080;
     margin: 0;
   }
 
@@ -308,10 +328,10 @@
     letter-spacing: 0.5px;
     cursor: pointer;
     transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.25s ease;
-    background: linear-gradient(135deg, #1e1e1e, #0a0a0a);
-    border: 1px solid #7f1d1d;
+    background: linear-gradient(135deg, #2a2a2a, #161616);
+    border: 1px solid rgba(255,255,255,0.12);
     color: #f5f5f5;
-    box-shadow: 0 0 14px rgba(139,0,0,0.5);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.4);
   }
   .attack-btn:hover { transform: translateY(-2px); }
   .attack-btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
@@ -390,6 +410,20 @@
       </svg>
     </div>
     <p class="success-text">KEY SUCCESSFULY ACTIVATED</p>
+  </div>
+</div>
+
+<!-- INVALID KEY POPUP -->
+<div id="invalidOverlay" class="overlay">
+  <div class="success-card">
+    <button id="closeInvalidBtn" class="close-x">✕</button>
+    <div class="check-wrap">
+      <svg class="check-svg" viewBox="0 0 52 52">
+        <circle class="cross-circle-bg" cx="26" cy="26" r="23"/>
+        <path class="cross-mark" d="M17 17 L35 35 M35 17 L17 35"/>
+      </svg>
+    </div>
+    <p class="invalid-text">INVALID API KEY ❌</p>
   </div>
 </div>
 
@@ -489,17 +523,46 @@ function syntaxHighlight(json) {
 }
 
 /* ---------------- Activation flow ---------------- */
-$('activateBtn').addEventListener('click', () => {
+$('activateBtn').addEventListener('click', async () => {
   const name = $('nameInput').value.trim();
   const key = $('keyActivateInput').value.trim();
+  const btn = $('activateBtn');
+
   if (!name || !key) {
     alert('Please enter both name and API key');
     return;
   }
-  localStorage.setItem(LS_NAME, name);
-  localStorage.setItem(LS_KEY, key);
-  $('activationOverlay').style.display = 'none';
-  $('successOverlay').style.display = 'flex';
+
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>Checking...';
+
+  try {
+    const res = await fetch(`/api?key=${encodeURIComponent(key)}`);
+    const data = await res.json();
+
+    if (data.message === 'text parameter required') {
+      // key is valid
+      localStorage.setItem(LS_NAME, name);
+      localStorage.setItem(LS_KEY, key);
+      $('activationOverlay').style.display = 'none';
+      $('successOverlay').style.display = 'flex';
+    } else {
+      // key invalid
+      $('activationOverlay').style.display = 'none';
+      $('invalidOverlay').style.display = 'flex';
+    }
+  } catch (err) {
+    alert('Network error, please try again: ' + err.message);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = 'Activate';
+  }
+});
+
+$('closeInvalidBtn').addEventListener('click', () => {
+  $('invalidOverlay').style.display = 'none';
+  $('keyActivateInput').value = '';
+  $('activationOverlay').style.display = 'flex';
 });
 
 $('closeSuccessBtn').addEventListener('click', () => {
@@ -585,18 +648,18 @@ async function handleAttack() {
       }
       $('inputGroup').style.display = 'none';
       btn.classList.add('stop-state');
-      btn.innerHTML = '🛑 STOP !';
+      btn.innerHTML = 'STOP !';
       btn.disabled = false;
       document.querySelector('.attack-card').classList.add('card-red');
       startTimer(startTs);
     } else {
       btn.disabled = false;
-      btn.innerHTML = '🚀 ATTACK !';
+      btn.innerHTML = 'ATTACK !';
     }
   } catch (err) {
     out.textContent = 'Error: ' + err.message;
     btn.disabled = false;
-    btn.innerHTML = '🚀 ATTACK !';
+    btn.innerHTML = 'ATTACK !';
   }
 }
 
