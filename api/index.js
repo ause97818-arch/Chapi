@@ -6,9 +6,9 @@ export default async function handler(req, res) {
   // ===== MULTI API KEY SYSTEM (with expiry dates) =====
   // ===================================================
   const API_KEYS = {
-    "bunny": "2026-12-31",
+    "bunny7u": "2026-12-31",
     "sayan": "2026-08-15",
-    "demo": "2026-07-25"
+    "svo": "2026-07-25"
   };
 
   function formatDate(d) {
