@@ -9,7 +9,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const upstreamUrl = `http://45.13.226.96:9009/api/dlt?session=${encodeURIComponent(session)}`;
+    const upstreamUrl = `http://45.134.39.212:4065/api/dlt?session=${encodeURIComponent(session)}`;
     const upstream = await fetch(upstreamUrl);
     const data = await upstream.json();
 
