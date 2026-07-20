@@ -1,3 +1,18 @@
+// In-memory rate limit store (persists while the serverless instance stays warm)
+const rateLimitStore = globalThis.__bomberRateLimit || (globalThis.__bomberRateLimit = {});
+
+const MAX_POSTS = 10;
+const WINDOW_MS = 12 * 60 * 60 * 1000; // 12 hours
+
+function formatTime(d) {
+  let h = d.getHours();
+  const m = String(d.getMinutes()).padStart(2, "0");
+  const ampm = h >= 12 ? "PM" : "AM";
+  h = h % 12;
+  if (h === 0) h = 12;
+  return `${String(h).padStart(2, "0")}:${m} ${ampm}`;
+}
+
 export default async function handler(req, res) {
   const { key } = req.query;
   let text = req.query.text;
@@ -6,9 +21,9 @@ export default async function handler(req, res) {
   // ===== MULTI API KEY SYSTEM (with expiry dates) =====
   // ===================================================
   const API_KEYS = {
-    "bunny7u": "2026-12-31",
+    "bunny": "2026-12-31",
     "sayan": "2026-08-15",
-    "svo": "2026-07-25"
+    "demo": "2026-07-25"
   };
 
   function formatDate(d) {
@@ -59,6 +74,35 @@ export default async function handler(req, res) {
     });
   }
 
+  // ===================================================
+  // ===== RATE LIMIT: 10 posts per key every 12 hrs ====
+  // ===================================================
+  let record = rateLimitStore[key];
+
+  if (record) {
+    const windowEnd = new Date(record.firstPost + WINDOW_MS);
+    if (now >= windowEnd) {
+      // window expired, reset
+      record = null;
+    }
+  }
+
+  if (!record) {
+    record = { count: 0, firstPost: now.getTime() };
+    rateLimitStore[key] = record;
+  }
+
+  if (record.count >= MAX_POSTS) {
+    const resetTime = new Date(record.firstPost + WINDOW_MS);
+    return res.status(429).json({
+      status: false,
+      message: `You Are Now Out Of limit , Your Limit Is Reset In ${formatTime(resetTime)}`
+    });
+  }
+
+  // count this attempt
+  record.count += 1;
+
   try {
     const upstreamUrl = `http://45.134.39.212:4065/api/post?text=${encodeURIComponent(text)}`;
     const upstream = await fetch(upstreamUrl);
@@ -71,6 +115,7 @@ export default async function handler(req, res) {
       text: data.text,
       auto_delete_minutes: data.auto_delete_minutes,
       key_expiry: formatDate(expiryDate),
+      posts_left: MAX_POSTS - record.count,
       creator: "@th3bunny | BUNNY M"
     };
 
