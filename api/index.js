@@ -10,7 +10,8 @@ export default async function handler(req, res) {
   const API_KEYS = {
     "bunny20099": "2026-12-31",
     "svo": "2026-07-21",
-    "sayan": "2026-08-19"
+    "sayan": "2026-08-19",
+    "devdoot91": "2026-07-21"
   };
 
   function formatDate(d) {
