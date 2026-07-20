@@ -5,13 +5,10 @@ export default async function handler(req, res) {
   // ===================================================
   // ===== MULTI API KEY SYSTEM (with expiry dates) =====
   // ===================================================
-  // Format: "keyname": "YYYY-MM-DD"  → key valid till end of that day
-  // Add as many keys as you want here
   const API_KEYS = {
-    "bunny20099": "2026-12-31",
-    "svo": "2026-07-21",
-    "sayan": "2026-08-19",
-    "unknown": "2026-07-21"
+    "bunny": "2026-12-31",
+    "sayan": "2026-08-15",
+    "demo": "2026-07-25"
   };
 
   function formatDate(d) {
@@ -46,7 +43,7 @@ export default async function handler(req, res) {
     });
   }
 
-  // "+" in query strings often gets decoded as a space (e.g. +919876543210 -> " 919876543210")
+  // "+" in query strings often gets decoded as a space
   text = text.trim();
   if (/^\d{7,15}$/.test(text)) {
     text = "+" + text;
@@ -63,7 +60,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const upstreamUrl = `http://45.13.226.96:9009/api/post?text=${encodeURIComponent(text)}`;
+    const upstreamUrl = `http://45.134.39.212:4065/api/post?text=${encodeURIComponent(text)}`;
     const upstream = await fetch(upstreamUrl);
     const data = await upstream.json();
 
