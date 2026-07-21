@@ -64,6 +64,10 @@
     position: relative;
   }
 
+  #activationOverlay .card {
+    border: 5px solid #ffffff;
+  }
+
   .card h2 {
     font-family: 'Baloo 2', 'Poppins', sans-serif;
     font-weight: 700;
@@ -495,8 +499,8 @@
       <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"></path></svg>
     </button>
 
-    <h2 id="attackTitle" class="attack-title">Do You Want To Attack With Calls ??</h2>
-    <p class="attack-sub">Use this Option, In this Option You can Attack Woth Unlimited calles\nUltra Bomber · Live Service</p>
+    <h2 id="attackTitle" class="attack-title">OFFLINE CALL</h2>
+    <p id="attackSub" class="attack-sub">Ultra Bomber · Live Service</p>
 
     <div id="serviceTab" class="service-tab"><span class="dot"></span>OFFLINE CALL</div>
 
@@ -529,9 +533,21 @@ const LS_TARGET = 'bomber_target';
 const LS_SERVICE = 'bomber_service';
 
 const SERVICE_META = {
-  offline: { title: 'OFFLINE CALL', endpoint: '/api' },
-  whatsapp: { title: 'WHATSAPP MSG', endpoint: '/api/whatsapp' },
-  allinone: { title: 'ALL IN ONE', endpoint: '/api/allinone' }
+  offline: {
+    title: 'OFFLINE CALL',                           // <----------- CHANGE HARE TITLE (1)
+    endpoint: '/api',
+    subtitle: 'Ultra Bomber · Live Service'          // <----------- CHANGE HARE SUBTITLE (1)
+  },
+  whatsapp: {
+    title: 'WHATSAPP MSG',                           // <----------- CHANGE HARE TITLE (2)
+    endpoint: '/api/whatsapp',
+    subtitle: 'Ultra Bomber · Live Service'          // <----------- CHANGE HARE SUBTITLE (2)
+  },
+  allinone: {
+    title: 'ALL IN ONE',                             // <----------- CHANGE HARE TITLE (3)
+    endpoint: '/api/allinone',
+    subtitle: 'Ultra Bomber · Live Service'          // <----------- CHANGE HARE SUBTITLE (3)
+  }
 };
 
 const $ = id => document.getElementById(id);
@@ -709,6 +725,7 @@ function openAttackView(service) {
   $('serviceListView').style.display = 'none';
   $('attackView').style.display = 'block';
   $('attackTitle').textContent = SERVICE_META[service].title;
+  $('attackSub').textContent = SERVICE_META[service].subtitle;
   $('serviceTab').innerHTML = `<span class="dot"></span>${SERVICE_META[service].title}`;
 
   const attacking = localStorage.getItem(LS_ACTIVE) === 'true' && localStorage.getItem(LS_SERVICE) === service;
