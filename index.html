@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ULTRA BOMBER</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Baloo+2:wght@600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #eef1f8;
@@ -65,10 +65,20 @@
   }
 
   .card h2 {
-    font-weight: 800;
-    font-size: 20px;
-    margin: 0 0 20px;
+    font-family: 'Baloo 2', 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 26px;
+    letter-spacing: 0.5px;
+    margin: 0 0 4px;
     color: var(--text-dark);
+  }
+
+  .card .tagline {
+    font-size: 11.5px;
+    font-weight: 500;
+    color: var(--text-muted);
+    margin: 0 0 22px;
+    letter-spacing: 0.3px;
   }
 
   .card label {
@@ -207,7 +217,9 @@
     background: linear-gradient(145deg, #4c8bf5, #3b82f6);
     box-shadow: 4px 4px 10px var(--shadow-dark), -4px -4px 10px var(--shadow-light);
     flex-shrink: 0;
+    overflow: hidden;
   }
+  .brand-icon img { width: 100%; height: 100%; object-fit: cover; }
   .page-title { font-weight: 800; font-size: 17px; margin: 0; color: var(--text-dark); letter-spacing: 0.3px; }
   .page-sub { font-size: 11px; color: var(--text-muted); margin: 2px 0 0; }
   .status-chip {
@@ -243,6 +255,10 @@
     flex-shrink: 0;
     box-shadow: 4px 4px 8px var(--shadow-dark), -4px -4px 8px var(--shadow-light);
   }
+  .service-icon svg { width: 21px; height: 21px; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .service-icon.icon-blue svg { stroke: #3b82f6; }
+  .service-icon.icon-green svg { stroke: #16a34a; }
+  .service-icon.icon-amber svg { stroke: #d97706; }
   .service-text { flex: 1; }
   .service-name { font-weight: 700; font-size: 15.5px; margin: 0; color: var(--text-dark); }
   .service-sub { font-size: 11.5px; color: var(--text-muted); margin: 3px 0 0; }
@@ -272,7 +288,8 @@
   .attack-sub { font-size: 11px; color: var(--text-muted); letter-spacing: 0.5px; margin: 0 0 18px; text-transform: uppercase; }
 
   .service-tab {
-    display: inline-flex;
+    display: table;
+    margin: 0 auto 20px;
     align-items: center;
     gap: 6px;
     padding: 9px 18px;
@@ -281,7 +298,6 @@
     color: var(--accent);
     background: var(--accent-soft);
     border-radius: 999px;
-    margin-bottom: 20px;
   }
   .service-tab .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
 
@@ -312,7 +328,7 @@
 
   .result-box {
     margin-top: 18px;
-    display: none;
+    display: block;
     border-radius: 16px;
     padding: 16px;
     font-family: 'Courier New', monospace;
@@ -322,7 +338,7 @@
     word-break: break-word;
     max-height: 260px;
     overflow-y: auto;
-    color: var(--text-dark);
+    color: var(--text-muted);
   }
   .k { color: #3b82f6; font-weight: 600; }
   .s { color: #16a34a; }
@@ -351,6 +367,7 @@
 <div id="activationOverlay" class="overlay">
   <div class="card neu-raised">
     <h2>Ultra Bomber</h2>
+    <p class="tagline">Fast · Reliable · Multi-Service Bombing</p>
     <label for="nameInput">Enter your name</label>
     <input id="nameInput" class="input neu-inset" type="text" placeholder="Your name">
     <label for="keyActivateInput">Enter your active API key</label>
@@ -419,7 +436,7 @@
   <!-- SERVICE LIST VIEW -->
   <div id="serviceListView" class="view">
     <div class="page-header neu-raised">
-      <div class="brand-icon">🐰</div>
+      <div class="brand-icon"><img src="https://cdnfile.pages.dev/faac8ce6f3.jpg" alt="Ultra Bomber"></div>
       <div>
         <p class="page-title">ULTRA BOMBER</p>
         <p class="page-sub">Choose a bombing method</p>
@@ -432,7 +449,9 @@
 
     <div class="service-list">
       <div class="service-card neu-raised" data-service="offline">
-        <div class="service-icon neu-raised">📞</div>
+        <div class="service-icon neu-raised icon-blue">
+          <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+        </div>
         <div class="service-text">
           <p class="service-name">OFFLINE CALL</p>
           <p class="service-sub">Repeated call bombing</p>
@@ -441,7 +460,9 @@
       </div>
 
       <div class="service-card neu-raised" data-service="whatsapp">
-        <div class="service-icon neu-raised">💬</div>
+        <div class="service-icon neu-raised icon-green">
+          <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+        </div>
         <div class="service-text">
           <p class="service-name">WHATSAPP MSG</p>
           <p class="service-sub">WhatsApp message bombing</p>
@@ -450,7 +471,9 @@
       </div>
 
       <div class="service-card neu-raised" data-service="allinone">
-        <div class="service-icon neu-raised">⚡</div>
+        <div class="service-icon neu-raised icon-amber">
+          <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+        </div>
         <div class="service-text">
           <p class="service-name">ALL IN ONE</p>
           <p class="service-sub">Combined bombing service</p>
@@ -483,7 +506,7 @@
 
       <div id="timerDisplay" class="timer-display neu-inset">00:00:00</div>
 
-      <div id="responseBox" class="result-box neu-inset"></div>
+      <div id="responseBox" class="result-box neu-inset">Response will appear here after you attack...</div>
     </div>
 
     <div class="footer-credit">Develope by <span>@th3bunny</span></div>
@@ -683,8 +706,8 @@ function openAttackView(service) {
   if (!attacking) {
     $('inputGroup').style.display = 'block';
     $('victimInput').value = '';
-    $('responseBox').style.display = 'none';
-    $('responseBox').textContent = '';
+    $('responseBox').style.display = 'block';
+    $('responseBox').textContent = 'Response will appear here after you attack...';
     $('timerDisplay').style.display = 'none';
     const btn = $('attackBtn');
     btn.classList.remove('stop-variant');
