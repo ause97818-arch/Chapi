@@ -177,6 +177,7 @@
     cursor: pointer;
   }
   .pill-btn svg { width: 14px; height: 14px; stroke: var(--text-muted); fill: none; stroke-width: 2; }
+  .pill-btn.disabled { opacity: 0.4; cursor: not-allowed; }
 
   .profile-pill {
     display: flex;
@@ -193,7 +194,9 @@
     font-size: 14px;
     color: #fff;
     background: linear-gradient(145deg, #4c8bf5, #3b82f6);
+    overflow: hidden;
   }
+  .dp img { width: 100%; height: 100%; object-fit: cover; }
   .profile-info { font-size: 10.5px; line-height: 1.4; }
   .profile-name { font-weight: 700; font-size: 12px; color: var(--text-dark); }
   .profile-meta { color: var(--text-muted); white-space: nowrap; }
@@ -336,6 +339,7 @@
     line-height: 1.6;
     white-space: pre-wrap;
     word-break: break-word;
+    min-height: 220px;
     max-height: 260px;
     overflow-y: auto;
     color: var(--text-muted);
@@ -424,7 +428,7 @@
     </button>
 
     <div class="profile-pill neu-pill">
-      <div class="dp" id="dpCircle">?</div>
+      <div class="dp" id="dpCircle"><img src="https://cdnfile.pages.dev/d21189bd9a.jpg" alt="dp"></div>
       <div class="profile-info">
         <div class="profile-name" id="profileName">Name</div>
         <div class="profile-meta">Exp: <b id="profileExpiry">—</b></div>
@@ -639,17 +643,22 @@ $('closeSuccessBtn').addEventListener('click', () => {
   showMainPage();
 });
 
+function syncLogoutState() {
+  const active = localStorage.getItem(LS_ACTIVE) === 'true';
+  $('logoutBtn').classList.toggle('disabled', active);
+}
+
 function showMainPage() {
   const name = localStorage.getItem(LS_NAME) || 'User';
   const expiry = localStorage.getItem(LS_EXPIRY) || '—';
   const attacks = localStorage.getItem(LS_ATTACKS) || '0';
 
-  $('dpCircle').textContent = initials(name);
   $('profileName').textContent = name;
   $('profileExpiry').textContent = expiry;
   $('profileAttacks').textContent = attacks;
 
   $('mainPage').style.display = 'block';
+  syncLogoutState();
 
   if (localStorage.getItem(LS_ACTIVE) === 'true') {
     const savedService = localStorage.getItem(LS_SERVICE) || 'offline';
@@ -723,6 +732,7 @@ function resumeAttackUI() {
   const btn = $('attackBtn');
   btn.classList.add('stop-variant');
   btn.textContent = 'Stop';
+  syncLogoutState();
   startTimer(start);
 }
 
@@ -771,6 +781,7 @@ async function handleAttack() {
       btn.classList.add('stop-variant');
       btn.textContent = 'Stop';
       btn.disabled = false;
+      syncLogoutState();
       startTimer(startTs);
     } else {
       btn.disabled = false;
@@ -826,6 +837,10 @@ $('stopOkBtn').addEventListener('click', () => {
 });
 
 $('logoutBtn').addEventListener('click', () => {
+  if (localStorage.getItem(LS_ACTIVE) === 'true') {
+    alert('An attack is currently running. Please press STOP before logging out.');
+    return;
+  }
   localStorage.clear();
   location.reload();
 });
