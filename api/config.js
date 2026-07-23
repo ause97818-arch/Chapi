@@ -7,7 +7,7 @@
 // ============================================================
 
 // ---- Upstream server base ----
-const UPSTREAM_BASE = "http://45.134.39.212:4065";
+const UPSTREAM_BASE = "http://51.75.118.79:20039";
 
 // ---- Individual upstream endpoints (TOTAL 4 APIs) ----
 export const UPSTREAM_URLS = {
@@ -26,7 +26,7 @@ export const UPSTREAM_URLS = {
 
 // ---- API keys (key -> expiry date "YYYY-MM-DD") ----
 export const API_KEYS = {
-  "bunny": "2026-12-31",
+  "bunny009": "2026-12-31",
   "sayan": "2026-08-15",
   "demo": "2026-07-25"
 };
